@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-4">
+  <div class="search-results mt-4">
+    <!-- Results will be shown here -->
+    {% for p in posts %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{p.title}}</h5>
+        <p class="card-text">{{p.content}}</p>
+        <a href="{% url 'post-detail' p.pk %}" class="btn btn-sm btn-outline-primary">View</a>
+      </div>
+    </div>
+    {% endfor %}
+    <!-- Repeat for each result -->
+  </div>
+</div>
+
+{% endblock content %}

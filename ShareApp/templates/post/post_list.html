@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<main class="feed-container">
+
+    <h1 class="mb-3">Posts by {{ view.kwargs.username|capfirst}} ({{ page_obj.paginator.count }})</h1>
+    {% for p in posts %}
+    <div class="post mb-4 p-3 border rounded shadow-sm">
+  
+      <div class="post-header mb-2 d-flex justify-content-between">
+        <span class="username fw-bold">{{ p.user.username | capfirst}}</span>
+        <span class="timestamp text-muted small">{{ p.date_uploaded }}</span>
+      </div>
+  
+      <div class="post-body mb-2">
+        <p class="description">{{ p.content }}</p>
+  
+        {% with p.file.name|lower as fname %}
+          {% if ".jpg" in fname or ".jpeg" in fname or ".png" in fname %}
+            <img src="{{ p.file.url }}" alt="Image" style="max-width:100%; max-height:300px; object-fit:cover;" class="img-fluid rounded">
+  
+          {% elif ".mp4" in fname or ".webm" in fname %}
+            <video controls preload="auto" style="width:100%; max-height:350px; object-fit:cover;" class="rounded">
+              <source src="{{ p.file.url }}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+  
+          {% elif ".mp3" in fname or ".wav" in fname %}
+            <audio controls preload="auto" style="width:100%; max-width:400px;">
+              <source src="{{ p.file.url }}" type="audio/mpeg">
+              Your browser does not support the audio tag.
+            </audio>
+  
+          {% else %}
+            <div class="file-preview d-flex align-items-center gap-2 mt-2">
+              <span class="file-icon">📄</span>
+              <span class="filename fw-medium">{{ p.title }}</span>
+            </div>
+          {% endif %}
+        {% endwith %}
+      </div>
+  
+      <div>
+        <a href="{{ p.file.url }}" download class="btn btn-sm btn-primary"><h2 style="color:blue;">Download</h2></a>
+        <a href="{% url 'post-detail' p.pk %}" class="btn btn-sm btn-outline-secondary"><h2 style="color:blue;">Details</h2></a>
+      </div>
+  
+    </div>
+    {% endfor %}
+    {% if is_paginated %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+  
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <strong>{{ num }}</strong>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+  
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</main>
+  
+{% endblock content %}

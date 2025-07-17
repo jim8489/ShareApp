@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="rgst">
+ <div class="box">
+  <div class="container">
+    <div class="card p-4 mt-4">
+  
+      <h2>Title - {{post.title}}</h2>
+  
+      <h4 class="fa-bold">
+        Posted by <b>[{{request.user.username|capfirst}}]</b> on [{{post.date_uploaded}}]
+      </h4>
+    <br>
+      <div class="mb-4">
+        <h4>Details:</h4>
+        <p>[{{post.content}}]</p>
+      </div>
+    <br>
+      <div>
+        <h4>Attached File:</h4>
+        {% if object.user != user %}
+        <div class="form-group mt-0 pt-0 d-flex justify-content-end">          
+          <a href="{{ object.file.url }}" download class="btn btn-primary flex-last" type="submit"><h2 class="fas fa-download"> Downlaod [{{post.title}}]</h2></a>
+        </div>
+      {% endif %}
+      <hr>
+      {% if object.user == user %}
+        <div>
+        <form method="GET" action="{% url 'post-delete' object.pk %}">
+          <button class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.pk %}"><h4>Delete</h4></button>
+        </form>
+        </div>
+      {% endif %}
+      <br>
+      </div>
+      <div>
+        {% if object.file %}
+          {% if object.extension == '.jpg' or object.extension == '.jpeg' or object.extension == '.png' %}
+            <a href="{{ object.file.url }}"  download ><img src="{{ object.file.url }}" style="max-width: 100%; height: auto; max-height: 300px;" alt="" class="img-fluid "></a>
+            <a href="{{ object.file.url }}"  download class="text-dark"><h5>{{ object.file }}</h5></a>
+          {% elif object.extension == '.mp4' %}
+            <div class="embed-responsive embed-responsive-16by9">
+              <video id="video-1_html_api" controls style="width: 100%; max-width: 600px; max-height: 350px; object-fit: cover;" class="vjs-tech" preload="auto" autoplay >
+                <source src="{{ object.file.url }}" type="video/mp4" class="embed-responsive">
+              </video>
+            </div>
+            <a href="{{ object.file.url }}"  download class="text-dark"><h5>{{ object.file }}</h5></a>
+           {% elif ".mp3" in fname or ".wav" in fname %}
+            <audio controls preload="auto" style="width:100%; max-width:400px;">
+              <source src="{{ p.file.url }}" type="audio/mpeg">
+              Your browser does not support the audio tag.
+            </audio>
+          {% else %}
+            <a href="{{ object.file.url }}"  download class="text-dark"><h5>{{ object.file }}</h5></a>
+          {% endif %}
+        {% endif %}
+      </div>
+      <br>
+      <div class="mt-4">
+        <a href="{% url 'home' %}">← Back to Feed</a>
+      </div>
+  
+    </div>
+  </div>
+ </div>
+</div>
+{% endblock content %}

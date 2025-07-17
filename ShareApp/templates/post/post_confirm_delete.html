@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<main class="feed-container">
+    <div class="rgst">
+        <div class="box">
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+                <h2>Are you sure you want to delete the post "{{ object.title }}"?</h2>
+            <div class="form-group">
+                <button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
+            </div>
+                <br>
+            <div>
+                <a class="btn btn-outline-secondary" href="{% url 'post-detail' object.pk %}"><h3>Cancel<h3></a>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+</main>
+{% endblock content %}

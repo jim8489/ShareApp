@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+  <div class="profile-card">
+    <h2>{{ user.username|capfirst }}'s Profile</h2>
+    <div class="profile-image">
+
+      <img src="{{ user.profile.image.url }}" style="width:200px; height:200px; object-fit: cover;" alt="Profile Image">
+
+    </div>
+
+    <div class="info">
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Joined:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+      <p><strong>Uploaded Files:</strong> {{ user.files.count }}</p>
+    </div>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+          <legend class="border-bottom mb-4">Profile Info:</legend>
+          {{ user_form|crispy }}
+          {{ profile_form|crispy }}
+      <div class="form-group">
+          <button class="btn btn-outline-info" type="submit">Update</button>
+      </div>
+  </form>
+  </div>
+
+{% endblock content %}

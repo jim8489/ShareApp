@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="rgst">
+  <div class="box">
+    <h2>Login to FileShare</h2>
+    <form method="POST" action="{% url 'login' %}">
+      {% csrf_token %}
+      <label for="username">Username</label>
+      <input type="text" name="username" required>
+
+      <label for="password">Password</label>
+      <input type="password" name="password" required>
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}
